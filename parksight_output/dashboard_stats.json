@@ -1,0 +1,158 @@
+{
+  "total_raw": 298450,
+  "total_approved": 115400,
+  "date_range": {
+    "start": "2023-11-09",
+    "end": "2024-03-29"
+  },
+  "hourly": {
+    "0": 9503,
+    "1": 7236,
+    "2": 10727,
+    "3": 10549,
+    "4": 11007,
+    "5": 12364,
+    "6": 8995,
+    "7": 4795,
+    "8": 2869,
+    "9": 1134,
+    "10": 210,
+    "11": 169,
+    "12": 58,
+    "13": 12,
+    "14": 3,
+    "15": 24,
+    "16": 92,
+    "17": 143,
+    "18": 429,
+    "19": 3603,
+    "20": 4631,
+    "21": 7789,
+    "22": 9136,
+    "23": 9922
+  },
+  "monthly": {
+    "11": 28642,
+    "12": 40709,
+    "1": 37745,
+    "2": 1266,
+    "3": 7038,
+    "4": 0
+  },
+  "dow": {
+    "0": 13996,
+    "1": 16308,
+    "2": 17944,
+    "3": 17797,
+    "4": 16610,
+    "5": 15844,
+    "6": 16901
+  },
+  "top_junctions": [
+    {
+      "name": "BTP051 - Safina Plaza Junction",
+      "count": 15449,
+      "lat": 12.9812,
+      "lon": 77.6087
+    },
+    {
+      "name": "BTP082 - KR Market Junction",
+      "count": 11538,
+      "lat": 12.9644,
+      "lon": 77.5772
+    },
+    {
+      "name": "BTP040 - Elite Junction",
+      "count": 10718,
+      "lat": 12.9691,
+      "lon": 77.587
+    },
+    {
+      "name": "BTP044 - Sagar Theatre Junction",
+      "count": 10549,
+      "lat": 12.9749,
+      "lon": 77.5789
+    },
+    {
+      "name": "BTP211 - Central Street Junction",
+      "count": 5388,
+      "lat": 12.9784,
+      "lon": 77.5958
+    },
+    {
+      "name": "BTP020 - Hosahalli Metro Station",
+      "count": 4101,
+      "lat": 12.9718,
+      "lon": 77.5108
+    }
+  ],
+  "top_stations": [
+    {
+      "name": "Upparpet",
+      "count": 34468
+    },
+    {
+      "name": "Shivajinagar",
+      "count": 28044
+    },
+    {
+      "name": "Malleshwaram",
+      "count": 22200
+    },
+    {
+      "name": "HAL Old Airport",
+      "count": 20819
+    },
+    {
+      "name": "City Market",
+      "count": 17646
+    },
+    {
+      "name": "Vijayanagara",
+      "count": 14652
+    },
+    {
+      "name": "Rajajinagar",
+      "count": 10998
+    },
+    {
+      "name": "Kodigehalli",
+      "count": 10916
+    },
+    {
+      "name": "Magadi Road",
+      "count": 8558
+    },
+    {
+      "name": "Jeevanbheemanagar",
+      "count": 6736
+    }
+  ],
+  "vehicle_types": {
+    "SCOOTER": 35715,
+    "CAR": 36833,
+    "MOTOR CYCLE": 15096,
+    "PASSENGER AUTO": 13859,
+    "MAXI-CAB": 4877,
+    "LGV": 3153,
+    "OTHERS": 5867
+  },
+  "violation_types": {
+    "WRONG PARKING": 164977,
+    "NO PARKING": 139050,
+    "PARKING IN A MAIN ROAD": 23943,
+    "DEFECTIVE NUMBER PLATE": 7848,
+    "PARKING ON FOOTPATH": 3757
+  },
+  "severity_distribution": {
+    "1": 52667,
+    "2": 60221,
+    "3": 2512
+  },
+  "peak_window_count": 53642,
+  "sunday_count": 16901,
+  "scita_sent": 255893,
+  "unique_officers": 2666,
+  "unique_devices": 3070,
+  "unique_stations": 54
+}

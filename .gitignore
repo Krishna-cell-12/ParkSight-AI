@@ -1,0 +1,84 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ParkSight AI — .gitignore
+# Gridlock 2.0 Hackathon Project
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Python virtual environment ─────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── Python cache & compiled files ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Raw dataset — 104MB CSV stays local only ───────────────────────────────
+jan to may police violation_anonymized791b166.csv
+*.csv
+*.xlsx
+*.xls
+data/
+datasets/
+
+# ── Generated ML outputs (large files, reproducible from scripts) ──────────
+parksight_output/clean_violations.csv
+parksight_output/violations_exploded.csv
+parksight_output/hotspot_clusters.csv
+parksight_output/hotspot_clusters_v2.csv
+parksight_output/hourly_baseline.csv
+
+# Keep JSON outputs (small, useful for dashboard) — NOT ignored
+# Keep PNG charts (visual evidence for judges)     — NOT ignored
+# Keep dashboard_stats.json                        — NOT ignored
+
+# ── Environment & secrets ──────────────────────────────────────────────────
+.env
+.env.*
+*.env
+secrets.json
+config/secrets.py
+
+# ── IDE & editor files ─────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Jupyter Notebooks checkpoints ─────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── OS-generated ───────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# ── Logs & temp files ──────────────────────────────────────────────────────
+*.log
+*.tmp
+*.bak
+*.orig
+/tmp/
+
+# ── Zip archives ───────────────────────────────────────────────────────────
+gridlock_submission.zip
+*.zip
+*.tar.gz
+*.rar
