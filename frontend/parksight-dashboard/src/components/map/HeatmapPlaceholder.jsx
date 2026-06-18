@@ -26,6 +26,7 @@ export default function HeatmapPlaceholder({ clusters }) {
   const { isDark } = useTheme();
   const [hoveredCluster, setHoveredCluster] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [containerSize, setContainerSize] = useState({ width: 300, height: 300 });
   const containerRef = useRef(null);
 
   const bgColor = isDark ? '#0D1B2A' : '#E8F0F7';
@@ -36,6 +37,7 @@ export default function HeatmapPlaceholder({ clusters }) {
     const rect = containerRef.current?.getBoundingClientRect();
     if (rect) {
       setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      setContainerSize({ width: rect.width, height: rect.height });
     }
   };
 
@@ -189,8 +191,8 @@ export default function HeatmapPlaceholder({ clusters }) {
             isDark ? 'bg-navy-600 border-navy-500 text-gray-200' : 'bg-white border-gray-200 text-gray-700'
           )}
           style={{
-            left: Math.min(mousePos.x + 12, (containerRef.current?.offsetWidth || 300) - 200),
-            top:  Math.min(mousePos.y + 12, (containerRef.current?.offsetHeight || 300) - 130),
+            left: Math.min(mousePos.x + 12, containerSize.width - 200),
+            top:  Math.min(mousePos.y + 12, containerSize.height - 130),
             width: 188,
           }}
         >

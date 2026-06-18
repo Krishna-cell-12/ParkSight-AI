@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import { useTheme } from '../context/ThemeContext';
-import { HOTSPOT_CLUSTERS, ML_STATS } from '../data/realData';
+import { HOTSPOT_CLUSTERS } from '../data/realData';
 
 function Toggle({ id, checked, onChange }) {
   return (

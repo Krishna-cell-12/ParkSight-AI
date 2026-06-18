@@ -3,16 +3,48 @@ import clsx from 'clsx';
 import { NEXTDAY_FORECAST } from '../data/realData';
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis,
-  CartesianGrid, Tooltip, Cell, ReferenceLine, Legend
+  CartesianGrid, Tooltip, Cell, ReferenceLine
 } from 'recharts';
 import {
-  Calendar, TrendingUp, AlertTriangle,
-  CheckCircle, Clock, Brain, MapPin
+  CheckCircle
 } from 'lucide-react';
 
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    const isWeekend = data.isWeekend;
+    const risk = data.risk;
+    const icon = risk === 'HIGH' ? '🔴' : risk === 'MEDIUM' ? '🟡' : '🟢';
+
+    return (
+      <div className="bg-navy-800 border border-navy-600 rounded-lg shadow-xl p-3 text-xs text-gray-200">
+        <p className="font-bold text-sm mb-1">{data.dayName} {data.date}</p>
+        {isWeekend && <p className="text-orange-400 mb-2 font-semibold">Weekend</p>}
+        <div className="flex gap-4">
+          <div className="flex flex-col">
+            <span className="text-gray-400">Predicted</span>
+            <span className="font-mono text-sm">{data.predicted}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-gray-400">CI Range</span>
+            <span className="font-mono text-sm">{data.ciLow}–{data.ciHigh}</span>
+          </div>
+        </div>
+        <p className="mt-2 font-medium">Risk: {icon} {risk}</p>
+        {data.recommendation && <p className="mt-1 text-gray-400 text-[10px]">{data.recommendation}</p>}
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function NextDayForecast() {
+  if (!NEXTDAY_FORECAST?.junctions) {
+    return <div className="p-6 text-gray-400">Loading forecast data...</div>
+  }
+
   // B) CITY-WIDE 7-DAY BAR CHART
-  const cityForecastData = NEXTDAY_FORECAST.cityWide.forecast.map(d => ({
+  const cityForecastData = (NEXTDAY_FORECAST.cityWide.forecast || []).map(d => ({
     day: d.dayName.slice(0, 3),
     date: d.date,
     predicted: d.predicted,
@@ -23,31 +55,6 @@ export default function NextDayForecast() {
     if (risk === 'HIGH') return '#EF4444';
     if (risk === 'MEDIUM') return '#F59E0B';
     return '#10B981';
-  };
-
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white dark:bg-navy-800 p-3 rounded shadow-lg border border-gray-100 dark:border-navy-600 z-50">
-          <p className="text-sm font-semibold mb-1 text-gray-800 dark:text-gray-100">{data.date}</p>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 dark:text-gray-400">Predicted:</span>
-            <span className="font-mono text-gray-900 dark:text-white">{data.predicted}</span>
-          </div>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-xs text-gray-500 dark:text-gray-400">Risk:</span>
-            <span
-              className="text-[10px] font-bold px-2 py-0.5 rounded text-white"
-              style={{ backgroundColor: getRiskColor(data.risk) }}
-            >
-              {data.risk}
-            </span>
-          </div>
-        </div>
-      );
-    }
-    return null;
   };
 
   return (

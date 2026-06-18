@@ -144,7 +144,9 @@ function ClusterCircle({ cluster, onClick, isSelected }) {
       if (!isSelected) c.setOptions({ fillOpacity: 0.25, strokeOpacity: 0.75 })
     })
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCircle(c)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInfoWindow(iw)
 
     return () => {
@@ -195,6 +197,7 @@ function ViolationHeatmap({ clusters, visible }) {
         ],
       })
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHeatmap(h)
       return () => h.setMap(null)
     } catch (err) {
@@ -219,6 +222,7 @@ function TrafficLayer({ visible }) {
   useEffect(() => {
     if (!map || !mapsLib) return
     const tl = new mapsLib.TrafficLayer()
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLayer(tl)
     return () => tl.setMap(null)
   }, [map, mapsLib])
@@ -240,9 +244,11 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
   const [mapType, setMapType] = useState('roadmap')
 
   // Register global dispatch handler for InfoWindow button
-  window.parkSightDispatch = useCallback((zoneName) => {
-    console.log('Dispatch requested for:', zoneName)
-    // Can be wired to Enforcement page state in Phase 5
+  useEffect(() => {
+    window.parkSightDispatch = (zoneName) => {
+      console.log('Dispatch requested for:', zoneName)
+      // Can be wired to Enforcement page state in Phase 5
+    }
   }, [])
 
   return (
