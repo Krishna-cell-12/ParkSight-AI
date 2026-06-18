@@ -12,6 +12,7 @@ import Enforcement   from '../../pages/Enforcement';
 import Reports       from '../../pages/Reports';
 import Alerts        from '../../pages/Alerts';
 import Settings      from '../../pages/Settings';
+import NextDayForecast from '../../pages/NextDayForecast';
 
 export default function Layout() {
   const { isDark } = useTheme();
@@ -26,6 +27,7 @@ export default function Layout() {
     reports:     <Reports     />,
     alerts:      <Alerts      />,
     settings:    <Settings    />,
+    nextday:     <NextDayForecast />,
   };
 
   return (

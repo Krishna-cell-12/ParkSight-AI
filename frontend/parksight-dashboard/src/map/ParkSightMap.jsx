@@ -170,33 +170,37 @@ function ClusterCircle({ cluster, onClick, isSelected }) {
 function ViolationHeatmap({ clusters, visible }) {
   const map = useMap()
   const visualizationLib = useMapsLibrary('visualization')
+  const coreLib = useMapsLibrary('core')
   const [heatmap, setHeatmap] = useState(null)
 
   useEffect(() => {
-    if (!map || !visualizationLib || !visible) return
+    if (!map || !visualizationLib || !coreLib) return
 
-    const points = clusters.map(c => ({
-      location: new window.google.maps.LatLng(c.lat, c.lng),
-      weight: Math.log1p(c.violations) / Math.log1p(68494),
-    }))
+    try {
+      const points = clusters.map(c => ({
+        location: new coreLib.LatLng(c.lat, c.lng),
+        weight: Math.log1p(c.violations || 0) / Math.log1p(68494),
+      }))
 
-    const h = new visualizationLib.HeatmapLayer({
-      data: points,
-      map,
-      radius: 40,
-      opacity: 0.7,
-      gradient: [
-        'rgba(0,0,0,0)',
-        'rgba(29,78,216,0.6)',
-        'rgba(124,58,237,0.7)',
-        'rgba(220,38,38,0.85)',
-        'rgba(252,165,165,1)',
-      ],
-    })
+      const h = new visualizationLib.HeatmapLayer({
+        data: points,
+        radius: 40,
+        opacity: 0.7,
+        gradient: [
+          'rgba(0,0,0,0)',
+          'rgba(29,78,216,0.6)',
+          'rgba(124,58,237,0.7)',
+          'rgba(220,38,38,0.85)',
+          'rgba(252,165,165,1)',
+        ],
+      })
 
-    setHeatmap(h)
-    return () => h.setMap(null)
-  }, [map, visualizationLib, visible])
+      setHeatmap(h)
+      return () => h.setMap(null)
+    } catch (err) {
+      console.error('Heatmap init error:', err)
+    }
+  }, [map, visualizationLib, coreLib, clusters])
 
   useEffect(() => {
     if (!heatmap) return
@@ -247,6 +251,7 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
       {/* Map Controls Toolbar */}
       <div className="absolute top-3 right-3 z-10 flex gap-2">
         <button
+          type="button"
           onClick={() => setMapType(t => t === 'roadmap' ? 'satellite' : 'roadmap')}
           className="px-3 py-1.5 text-xs font-semibold rounded-lg border
             bg-navy-700/90 border-navy-500 text-gray-300
@@ -255,6 +260,7 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
           {mapType === 'roadmap' ? '🛰 Satellite' : '🗺 Map'}
         </button>
         <button
+          type="button"
           onClick={() => setShowTraffic(v => !v)}
           className={`px-3 py-1.5 text-xs font-semibold rounded-lg border
             backdrop-blur-sm transition-all ${
@@ -266,6 +272,7 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
           🚦 Traffic {showTraffic ? 'ON' : 'OFF'}
         </button>
         <button
+          type="button"
           onClick={() => setShowHeatmap(v => !v)}
           className={`px-3 py-1.5 text-xs font-semibold rounded-lg border
             backdrop-blur-sm transition-all ${

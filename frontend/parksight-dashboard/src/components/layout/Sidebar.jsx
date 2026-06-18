@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import {
   LayoutDashboard, MapPin, Car, LineChart, ShieldCheck,
-  FileBarChart, Bell, Settings,
+  FileBarChart, Bell, Settings, CalendarDays
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { id: 'impact',     label: 'Impact Analysis', icon: LineChart       },
   { id: 'enforcement',label: 'Enforcement',     icon: ShieldCheck     },
   { id: 'reports',    label: 'Reports',         icon: FileBarChart    },
+  { id: 'nextday',    label: 'Next Day',        icon: CalendarDays    },
   { id: 'alerts',     label: 'Alerts',          icon: Bell            },
   { id: 'settings',   label: 'Settings',        icon: Settings        },
 ];
