@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ParkSight AI - Google Maps Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #0B1220;
+      color: #E8EDF4;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* --- HEADER --- */
+    header {
+      height: 64px;
+      background-color: #0B1220;
+      border-bottom: 1px solid rgba(141, 164, 190, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: #3B82F6;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #8DA4BE;
+      border-left: 1px solid rgba(141, 164, 190, 0.3);
+      padding-left: 12px;
+    }
+    .header-center {
+      display: flex;
+      gap: 12px;
+    }
+    .pill {
+      background-color: rgba(141, 164, 190, 0.1);
+      border: 1px solid rgba(141, 164, 190, 0.2);
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10B981;
+    }
+    .header-right {
+      display: flex;
+      gap: 8px;
+    }
+    .toggle-btn {
+      background-color: rgba(141, 164, 190, 0.1);
+      border: 1px solid rgba(141, 164, 190, 0.2);
+      color: #E8EDF4;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .toggle-btn:hover {
+      background-color: rgba(141, 164, 190, 0.2);
+    }
+    .toggle-btn.active {
+      background-color: #3B82F6;
+      border-color: #3B82F6;
+      color: white;
+    }
+
+    /* --- TABS --- */
+    .tabs-bar {
+      display: flex;
+      background-color: #111827;
+      border-bottom: 1px solid rgba(141, 164, 190, 0.2);
+      padding: 0 24px;
+      flex-shrink: 0;
+    }
+    .tab-btn {
+      padding: 12px 24px;
+      color: #8DA4BE;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: #3B82F6;
+      border-bottom-color: #3B82F6;
+    }
+    .tab-content {
+      display: none;
+      flex: 1;
+      height: calc(100vh - 64px - 45px); /* header and tab bar */
+    }
+    .tab-content.active {
+      display: flex;
+    }
+
+    /* --- LAYOUT --- */
+    .main-container {
+      width: 100%;
+    }
+    .map-column {
+      width: 65%;
+      height: 100%;
+      position: relative;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    .panel-column {
+      width: 35%;
+      height: 100%;
+      background-color: #111827;
+      border-left: 1px solid rgba(141, 164, 190, 0.2);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- RIGHT PANEL SCROLLABLE --- */
+    .priority-zones {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #E8EDF4;
+    }
+
+    /* Zone Cards */
+    .zone-card {
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(141, 164, 190, 0.15);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .zone-card:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+      border-color: #3B82F6;
+    }
+    .zone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .zone-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .zone-station {
+      font-size: 12px;
+      color: #8DA4BE;
+      margin-top: 2px;
+    }
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #8DA4BE;
+      margin-bottom: 6px;
+    }
+    .bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background-color: #3B82F6;
+      border-radius: 3px;
+    }
+
+    /* --- SHIFT FORECAST CHART (Live Map) --- */
+    .forecast-container {
+      padding: 20px;
+      border-top: 1px solid rgba(141, 164, 190, 0.2);
+      background-color: #0B1220;
+    }
+    .chart-wrapper {
+      display: flex;
+      align-items: flex-end;
+      height: 120px;
+      gap: 6px;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(141, 164, 190, 0.3);
+      padding-bottom: 4px;
+    }
+    .chart-bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+    .chart-bar {
+      width: 100%;
+      max-width: 20px;
+      background-color: #3B82F6;
+      border-radius: 2px 2px 0 0;
+      transition: height 0.5s ease;
+    }
+    .chart-bar.alert {
+      background-color: #EF4444;
+    }
+    .chart-label {
+      font-size: 10px;
+      color: #8DA4BE;
+      margin-top: 4px;
+    }
+    .forecast-note {
+      font-size: 12px;
+      color: #8DA4BE;
+      text-align: center;
+    }
+
+    /* --- INFOWINDOW STYLING --- */
+    .gm-style-iw {
+      background-color: #111827 !important;
+      border: 1px solid rgba(141, 164, 190, 0.3);
+      border-radius: 8px !important;
+      padding: 0 !important;
+    }
+    .gm-style-iw-d {
+      overflow: hidden !important;
+      padding: 16px !important;
+    }
+    .gm-style-iw-tc::after {
+      background: #111827 !important;
+      border: 1px solid rgba(141, 164, 190, 0.3);
+    }
+    .iw-content {
+      color: #E8EDF4;
+      min-width: 220px;
+    }
+    .iw-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .iw-subtitle {
+      font-size: 12px;
+      color: #8DA4BE;
+      margin-bottom: 12px;
+    }
+    .iw-stat {
+      font-size: 13px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .iw-stat span {
+      color: #8DA4BE;
+    }
+    .iw-btn {
+      width: 100%;
+      background-color: #10B981;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+    .iw-btn:hover {
+      background-color: #059669;
+    }
+
+    /* --- FORECAST TAB --- */
+    .forecast-layout {
+      flex-direction: column;
+      padding: 24px;
+      overflow-y: auto;
+      gap: 24px;
+      background-color: #0B1220;
+    }
+    .metrics-row {
+      display: flex;
+      gap: 16px;
+    }
+    .metric-card {
+      background-color: #111827;
+      border: 1px solid rgba(141, 164, 190, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      flex: 1;
+    }
+    .metric-card-title {
+      font-size: 13px;
+      color: #8DA4BE;
+      margin-bottom: 8px;
+    }
+    .metric-card-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #E8EDF4;
+    }
+    .forecast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .fc-card {
+      background-color: #111827;
+      border: 1px solid rgba(141, 164, 190, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .fc-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .fc-title {
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .fc-alert {
+      font-size: 12px;
+      color: #EF4444;
+      font-weight: 600;
+    }
+    .fc-timeline {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .fc-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .fc-box {
+      width: 100%;
+      height: 12px;
+      border-radius: 2px;
+    }
+    .fc-box.HIGH { background-color: #EF4444; }
+    .fc-box.MEDIUM { background-color: #EAB308; }
+    .fc-box.LOW { background-color: #10B981; }
+    
+    .fc-label {
+      font-size: 9px;
+      color: #8DA4BE;
+    }
+    .fc-prob {
+      font-size: 12px;
+      color: #8DA4BE;
+      margin-bottom: 12px;
+    }
+    .fc-btn {
+      width: 100%;
+      background-color: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+      border: 1px solid #3B82F6;
+      padding: 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+      margin-top: auto;
+    }
+    .fc-btn:hover {
+      background-color: #3B82F6;
+      color: white;
+    }
+    .chart-panel {
+      background-color: #111827;
+      border: 1px solid rgba(141, 164, 190, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      height: 350px;
+      position: relative;
+    }
+    .fc-footer {
+      font-size: 11px;
+      color: #8DA4BE;
+      text-align: center;
+      margin-top: auto;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="logo">🅿 ParkSight AI</div>
+      <div class="subtitle">Bengaluru Traffic Intelligence</div>
+    </div>
+    <div class="header-center">
+      <div class="pill">118 Zones Monitored</div>
+      <div class="pill">
+        <div class="live-dot"></div> Live
+      </div>
+      <div class="pill" id="clock">--:--:--</div>
+    </div>
+    <div class="header-right">
+      <button class="toggle-btn" id="btn-map-type" onclick="toggleMapType()">Satellite</button>
+      <button class="toggle-btn" id="btn-traffic" onclick="toggleTraffic()">Traffic: OFF</button>
+      <button class="toggle-btn" id="btn-heatmap" onclick="toggleHeatmap()">Heatmap: OFF</button>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <div class="tabs-bar">
+    <div class="tab-btn active" onclick="switchTab('tab-live-map')">Live Map</div>
+    <div class="tab-btn" onclick="switchTab('tab-forecast')">Congestion Forecast</div>
+  </div>
+
+  <!-- MAIN (Live Map) -->
+  <div id="tab-live-map" class="tab-content main-container active">
+    <div class="map-column">
+      <div id="map"></div>
+    </div>
+    <div class="panel-column">
+      <div class="priority-zones">
+        <div class="section-title">Priority Zones</div>
+        <div id="zones-list"></div>
+      </div>
+      <div class="forecast-container">
+        <div class="section-title">Tonight's Shift Forecast <span style="font-size:12px; color:#8DA4BE; font-weight:normal;">(Safina Plaza Junction)</span></div>
+        <div class="chart-wrapper" id="forecast-chart"></div>
+        <div class="forecast-note" id="forecast-note">Loading forecast...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORECAST TAB -->
+  <div id="tab-forecast" class="tab-content forecast-layout">
+    <div class="metrics-row" id="fc-metrics"></div>
+    <div class="section-title">Next 12 Hours Forecast</div>
+    <div class="forecast-grid" id="fc-grid"></div>
+    <div class="chart-panel">
+      <canvas id="probChart"></canvas>
+    </div>
+    <div class="fc-footer" id="fc-footer"></div>
+  </div>
+
+  <script>
+    // Tab switching
+    window.switchTab = function(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    };
+
+    // Update clock
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString();
+    }, 1000);
+
+    let map, heatmap, trafficLayer;
+    let markers = [];
+    let infoWindow;
+    let routeLine = null;
+
+    // Custom dark mode styles
+    const darkMapStyles = [
+      {elementType:"geometry", stylers:[{color:"#1a1a2e"}]},
+      {elementType:"labels.text.fill", stylers:[{color:"#8DA4BE"}]},
+      {elementType:"labels.text.stroke", stylers:[{color:"#0B1220"}]},
+      {featureType:"road", elementType:"geometry", stylers:[{color:"#2A3A4A"}]},
+      {featureType:"road.arterial", elementType:"geometry", stylers:[{color:"#1C3A4A"}]},
+      {featureType:"water", elementType:"geometry", stylers:[{color:"#0B1220"}]},
+      {featureType:"poi", stylers:[{visibility:"off"}]},
+      {featureType:"transit", stylers:[{visibility:"off"}]}
+    ];
+
+    async function initMap() {
+      // 1. Initialize Map
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 12.9716, lng: 77.5946 },
+        zoom: 12,
+        styles: darkMapStyles,
+        disableDefaultUI: true,
+        zoomControl: true
+      });
+
+      infoWindow = new google.maps.InfoWindow();
+
+      // 2. Load Data
+      try {
+        const [mapRes, fcRes] = await Promise.all([
+          fetch('./maps_data.json'),
+          fetch('./congestion_forecast.json')
+        ]);
+        const data = await mapRes.json();
+        const fcData = await fcRes.json();
+        
+        setupMapLayers(data);
+        populateRightPanel(data);
+        populateForecastChart(data.prediction);
+        
+        populateForecastTab(fcData);
+      } catch (err) {
+        console.error("Error loading data:", err);
+        document.getElementById('zones-list').innerHTML = `<div style="padding:20px;color:#EF4444;">Error loading data. Make sure to run the python export scripts and use a local server.</div>`;
+      }
+    }
+
+    function setupMapLayers(data) {
+      // Setup Heatmap (hidden by default)
+      const heatPoints = data.heatmap_points.map(p => {
+        return {
+          location: new google.maps.LatLng(p.lat, p.lng),
+          weight: p.weight
+        };
+      });
+
+      heatmap = new google.maps.visualization.HeatmapLayer({
+        data: heatPoints,
+        gradient: ['rgba(0,0,0,0)', '#1D4ED8', '#7C3AED', '#DC2626', '#FCA5A5'],
+        radius: 40,
+        opacity: 0.7
+      });
+
+      // Setup Traffic Layer (hidden by default)
+      trafficLayer = new google.maps.TrafficLayer();
+
+      // Setup Circles and Pins
+      data.markers.forEach(cluster => {
+        const center = { lat: cluster.lat, lng: cluster.lng };
+
+        // The 300m Zone Circle
+        const circle = new google.maps.Circle({
+          strokeColor: cluster.color,
+          strokeOpacity: 0.8,
+          strokeWeight: 1.5,
+          fillColor: cluster.color,
+          fillOpacity: 0.25,
+          map: map,
+          center: center,
+          radius: cluster.radius_metres
+        });
+
+        // The Pin (SVG)
+        const pinIcon = {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: cluster.color,
+          fillOpacity: 1,
+          strokeColor: '#FFFFFF',
+          strokeWeight: 2,
+          scale: cluster.impact_score * 2 // bigger score = bigger pin
+        };
+
+        const marker = new google.maps.Marker({
+          position: center,
+          map: map,
+          icon: pinIcon,
+          title: cluster.zone_name
+        });
+
+        markers.push({ id: cluster.cluster_id, marker, circle, data: cluster });
+
+        // Click events
+        const openInfo = () => showInfoWindow(cluster, marker);
+        circle.addListener('click', openInfo);
+        marker.addListener('click', openInfo);
+      });
+    }
+
+    function showInfoWindow(cluster, anchorMarker) {
+      const content = `
+        <div class="iw-content">
+          <div class="iw-title">${cluster.zone_name}</div>
+          <div class="iw-subtitle">Station: ${cluster.station}</div>
+          
+          <div class="iw-stat"><span>Violations:</span> <strong>${cluster.violation_count.toLocaleString()}</strong></div>
+          <div class="iw-stat"><span>Impact Score:</span> <strong>${cluster.impact_score} / 10</strong></div>
+          <div class="iw-stat"><span>Peak Window:</span> <strong>${cluster.peak_hour_ratio}%</strong></div>
+          <div class="iw-stat"><span>Top Violation:</span> <strong>${cluster.top_violation}</strong></div>
+          <div class="iw-stat"><span>Vehicle:</span> <strong>${cluster.dominant_vehicle}</strong></div>
+          
+          <button class="iw-btn" onclick="dispatchOfficer(${cluster.lat}, ${cluster.lng})">Dispatch Officer</button>
+        </div>
+      `;
+      infoWindow.setContent(content);
+      infoWindow.open(map, anchorMarker);
+    }
+
+    // Called by InfoWindow button
+    window.dispatchOfficer = function(lat, lng) {
+      if (routeLine) routeLine.setMap(null);
+      
+      // Mock police station (Upparpet area)
+      const station = { lat: 12.9770, lng: 77.5730 };
+      
+      routeLine = new google.maps.Polyline({
+        path: [station, {lat, lng}],
+        geodesic: true,
+        strokeColor: '#3B82F6',
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+        map: map
+      });
+      alert('Officer dispatched! Route displayed in blue.');
+    };
+
+    function populateRightPanel(data) {
+      // Sort by impact score descending, take top 10
+      const topZones = [...data.markers]
+        .sort((a, b) => b.impact_score - a.impact_score)
+        .slice(0, 10);
+      
+      const maxCount = Math.max(...topZones.map(z => z.violation_count));
+      const listDiv = document.getElementById('zones-list');
+      
+      listDiv.innerHTML = topZones.map(z => {
+        const widthPct = (z.violation_count / maxCount) * 100;
+        
+        return `
+          <div class="zone-card" onclick="focusZone(${z.lat}, ${z.lng}, ${z.cluster_id})">
+            <div class="zone-header">
+              <div>
+                <div class="zone-name">${z.zone_name}</div>
+                <div class="zone-station">${z.station}</div>
+              </div>
+              <div class="badge" style="background-color:${z.color}33; color:${z.color}; border: 1px solid ${z.color}66;">
+                ${z.impact_score}
+              </div>
+            </div>
+            <div class="stats-row">
+              <span>${z.violation_count.toLocaleString()} Violations</span>
+              <span>Peak: ${z.peak_hour_ratio}%</span>
+            </div>
+            <div class="bar-container">
+              <div class="bar-fill" style="width: ${widthPct}%; background-color: ${z.color};"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.focusZone = function(lat, lng, id) {
+      const pos = new google.maps.LatLng(lat, lng);
+      map.panTo(pos);
+      map.setZoom(15);
+      
+      const mItem = markers.find(m => m.id === id);
+      if (mItem) {
+        showInfoWindow(mItem.data, mItem.marker);
+      }
+    };
+
+    function populateForecastChart(prediction) {
+      if (!prediction || !prediction.hourly_forecast) return;
+      
+      const hours = [19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6];
+      const maxVal = Math.max(...hours.map(h => prediction.hourly_forecast[h.toString()]?.predicted_violations || 0));
+      
+      const chartDiv = document.getElementById('forecast-chart');
+      
+      let html = '';
+      let peakHour = '';
+      let peakVal = 0;
+
+      hours.forEach(h => {
+        const strH = h.toString();
+        const data = prediction.hourly_forecast[strH];
+        if (!data) return;
+        
+        const val = data.predicted_violations;
+        const heightPct = (val / maxVal) * 100;
+        const isAlert = data.is_alert;
+        
+        if (val > peakVal) {
+          peakVal = val;
+          peakHour = h;
+        }
+        
+        const label = h === 0 ? '12A' : (h > 12 ? (h-12)+'P' : h+'A');
+        
+        html += `
+          <div class="chart-bar-group">
+            <div class="chart-bar ${isAlert ? 'alert' : ''}" style="height: ${heightPct}%" title="${val.toFixed(1)} violations"></div>
+            <div class="chart-label">${label}</div>
+          </div>
+        `;
+      });
+      
+      chartDiv.innerHTML = html;
+      
+      const peakLabel = peakHour === 0 ? '12AM' : (peakHour > 12 ? (peakHour-12)+'PM' : peakHour+'AM');
+      document.getElementById('forecast-note').textContent = `Peak: ${peakLabel} (${peakVal.toFixed(1)} avg violations)`;
+    }
+
+    // Populate the new Forecast Tab
+    function populateForecastTab(fcData) {
+      const junctions = fcData.junctions;
+      let zonesHighRisk = 0;
+      let nextPeakHourStr = '-';
+      let earliestAlertTime = "99:99";
+
+      const gridHtml = [];
+      const datasets = [];
+      const colors = ['#EF4444', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899'];
+      let cIdx = 0;
+      let labels = [];
+
+      for (const [fullJunc, forecasts] of Object.entries(junctions)) {
+        if(labels.length === 0) {
+           labels = forecasts.map(f => f.time);
+        }
+        
+        const hasHigh = forecasts.some(f => f.congestion_level === 'HIGH');
+        const hasMedium = forecasts.some(f => f.congestion_level === 'MEDIUM');
+        
+        if (hasHigh) zonesHighRisk++;
+        
+        // Find earliest HIGH alert for peak metric
+        const firstHighAlert = forecasts.find(f => f.congestion_level === 'HIGH');
+        if (firstHighAlert && firstHighAlert.time < earliestAlertTime) {
+          earliestAlertTime = firstHighAlert.time;
+          nextPeakHourStr = earliestAlertTime;
+        }
+
+        const maxProb = Math.max(...forecasts.map(f => f.congestion_probability));
+        
+        // Next alert time logic
+        const nextAlertHour = forecasts.find(f => f.congestion_level === 'HIGH' || f.congestion_level === 'MEDIUM');
+        const alertHtml = nextAlertHour ? `Next Alert: ${nextAlertHour.time} (${nextAlertHour.congestion_level})` : 'No Alerts';
+        const alertColor = nextAlertHour?.congestion_level === 'HIGH' ? '#EF4444' : (nextAlertHour?.congestion_level === 'MEDIUM' ? '#EAB308' : '#10B981');
+        
+        const timeline = forecasts.map(f => `
+          <div class="fc-step">
+            <div class="fc-box ${f.congestion_level}" title="${f.time}: ${(f.congestion_probability*100).toFixed(0)}%"></div>
+            <div class="fc-label">${f.time.split(':')[0]}</div>
+          </div>
+        `).join('');
+
+        const shortName = fullJunc.split(' - ').pop();
+        const disableBtn = hasHigh ? '' : 'style="opacity:0.5; cursor:not-allowed" disabled';
+
+        gridHtml.push(`
+          <div class="fc-card">
+            <div class="fc-header">
+              <div class="fc-title">${shortName}</div>
+              <div class="fc-alert" style="color: ${alertColor}">${alertHtml}</div>
+            </div>
+            <div class="fc-timeline">${timeline}</div>
+            <div class="fc-prob">Peak Probability: ${(maxProb*100).toFixed(1)}%</div>
+            <button class="fc-btn" ${disableBtn} onclick="alert('Officer team alerted for prepositioning at ${shortName}')">Pre-position officer</button>
+          </div>
+        `);
+        
+        datasets.push({
+          label: shortName,
+          data: forecasts.map(f => f.congestion_probability * 100),
+          borderColor: colors[cIdx % colors.length],
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          tension: 0.4
+        });
+        cIdx++;
+      }
+
+      if(earliestAlertTime === "99:99") nextPeakHourStr = "None";
+
+      // Metrics
+      document.getElementById('fc-metrics').innerHTML = `
+        <div class="metric-card">
+          <div class="metric-card-title">Zones at HIGH Risk</div>
+          <div class="metric-card-value" style="color:${zonesHighRisk>0?'#EF4444':'#10B981'}">${zonesHighRisk}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-card-title">Next Peak Hour</div>
+          <div class="metric-card-value">${nextPeakHourStr}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-card-title">Model Accuracy</div>
+          <div class="metric-card-value">${(fcData.rf_roc_auc * 100).toFixed(1)}% <span style="font-size:12px; font-weight:normal; color:#8DA4BE;">ROC-AUC</span></div>
+        </div>
+      `;
+
+      // Grid
+      document.getElementById('fc-grid').innerHTML = gridHtml.join('');
+
+      // Footer
+      document.getElementById('fc-footer').innerHTML = `Predictions generated by Random Forest model trained on 115,400 approved BTP challan records (Nov 2023 – Mar 2024). Model F1: ${fcData.rf_f1_cv} | ROC-AUC: ${fcData.rf_roc_auc}`;
+
+      // Chart.js initialization
+      const ctx = document.getElementById('probChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          color: '#8DA4BE',
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              grid: { color: 'rgba(141, 164, 190, 0.1)' },
+              ticks: { color: '#8DA4BE', callback: v => v + '%' }
+            },
+            x: {
+              grid: { color: 'rgba(141, 164, 190, 0.1)' },
+              ticks: { color: '#8DA4BE' }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: { color: '#8DA4BE', boxWidth: 12, usePointStyle: true }
+            },
+            annotation: {
+              annotations: {
+                alertLine: {
+                  type: 'line',
+                  yMin: 60,
+                  yMax: 60,
+                  borderColor: '#EF4444',
+                  borderWidth: 2,
+                  borderDash: [5, 5],
+                  label: {
+                    content: 'Alert threshold (60%)',
+                    display: true,
+                    position: 'end',
+                    backgroundColor: '#EF4444',
+                    font: { size: 10 }
+                  }
+                },
+                watchLine: {
+                  type: 'line',
+                  yMin: 40,
+                  yMax: 40,
+                  borderColor: '#EAB308',
+                  borderWidth: 2,
+                  borderDash: [5, 5],
+                  label: {
+                    content: 'Watch threshold (40%)',
+                    display: true,
+                    position: 'end',
+                    backgroundColor: '#EAB308',
+                    color: '#0B1220',
+                    font: { size: 10 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Toggles
+    let mapIsSatellite = false;
+    window.toggleMapType = function() {
+      mapIsSatellite = !mapIsSatellite;
+      map.setMapTypeId(mapIsSatellite ? 'hybrid' : 'roadmap');
+      const btn = document.getElementById('btn-map-type');
+      btn.textContent = mapIsSatellite ? 'Map View' : 'Satellite';
+      btn.classList.toggle('active', mapIsSatellite);
+    };
+
+    let heatmapOn = false;
+    window.toggleHeatmap = function() {
+      heatmapOn = !heatmapOn;
+      heatmap.setMap(heatmapOn ? map : null);
+      const btn = document.getElementById('btn-heatmap');
+      btn.textContent = `Heatmap: ${heatmapOn ? 'ON' : 'OFF'}`;
+      btn.classList.toggle('active', heatmapOn);
+    };
+
+    let trafficOn = false;
+    window.toggleTraffic = function() {
+      trafficOn = !trafficOn;
+      trafficLayer.setMap(trafficOn ? map : null);
+      const btn = document.getElementById('btn-traffic');
+      btn.textContent = `Traffic: ${trafficOn ? 'ON' : 'OFF'}`;
+      btn.classList.toggle('active', trafficOn);
+    };
+  </script>
+
+  <!-- IMPORTANT: Replace YOUR_API_KEY with your actual Google Maps API key -->
+  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6nAsaE8Q8lJE_xsnHEaQIL1d8oa0yZ44&libraries=visualization&callback=initMap"></script>
+</body>
+</html>

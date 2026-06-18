@@ -1,0 +1,614 @@
+{
+  "generated_at": "2026-06-17T23:50:45.810765+05:30",
+  "model": "RandomForestClassifier",
+  "features_used": [
+    "violation_count",
+    "severity_mean",
+    "high_sev_count",
+    "unique_vehicles",
+    "lag_1h",
+    "lag_2h",
+    "lag_3h",
+    "rolling_7d_avg",
+    "is_weekend",
+    "is_peak",
+    "hour",
+    "dow",
+    "month",
+    "junction_code"
+  ],
+  "rf_f1_cv": 0.76,
+  "rf_roc_auc": 0.962,
+  "lr_f1_cv": 0.806,
+  "forecast_window": "23:50 to 10:50",
+  "junctions": {
+    "BTP051 - Safina Plaza Junction": [
+      {
+        "time": "23:50",
+        "hour": 23,
+        "predicted_violations": 3.6,
+        "congestion_probability": 0.101,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "00:50",
+        "hour": 0,
+        "predicted_violations": 6.6,
+        "congestion_probability": 0.176,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "01:50",
+        "hour": 1,
+        "predicted_violations": 5.2,
+        "congestion_probability": 0.064,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "02:50",
+        "hour": 2,
+        "predicted_violations": 12.3,
+        "congestion_probability": 0.421,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "03:50",
+        "hour": 3,
+        "predicted_violations": 11.2,
+        "congestion_probability": 0.402,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "04:50",
+        "hour": 4,
+        "predicted_violations": 11.7,
+        "congestion_probability": 0.415,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "05:50",
+        "hour": 5,
+        "predicted_violations": 12.2,
+        "congestion_probability": 0.441,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "06:50",
+        "hour": 6,
+        "predicted_violations": 10.0,
+        "congestion_probability": 0.483,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "07:50",
+        "hour": 7,
+        "predicted_violations": 3.7,
+        "congestion_probability": 0.073,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "08:50",
+        "hour": 8,
+        "predicted_violations": 4.2,
+        "congestion_probability": 0.092,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "09:50",
+        "hour": 9,
+        "predicted_violations": 5.4,
+        "congestion_probability": 0.214,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "10:50",
+        "hour": 10,
+        "predicted_violations": 2.0,
+        "congestion_probability": 0.086,
+        "congestion_level": "LOW",
+        "alert": false
+      }
+    ],
+    "BTP082 - KR Market Junction": [
+      {
+        "time": "23:50",
+        "hour": 23,
+        "predicted_violations": 4.3,
+        "congestion_probability": 0.094,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "00:50",
+        "hour": 0,
+        "predicted_violations": 6.1,
+        "congestion_probability": 0.159,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "01:50",
+        "hour": 1,
+        "predicted_violations": 4.3,
+        "congestion_probability": 0.036,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "02:50",
+        "hour": 2,
+        "predicted_violations": 4.8,
+        "congestion_probability": 0.046,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "03:50",
+        "hour": 3,
+        "predicted_violations": 6.9,
+        "congestion_probability": 0.102,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "04:50",
+        "hour": 4,
+        "predicted_violations": 5.5,
+        "congestion_probability": 0.034,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "05:50",
+        "hour": 5,
+        "predicted_violations": 4.7,
+        "congestion_probability": 0.049,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "06:50",
+        "hour": 6,
+        "predicted_violations": 4.5,
+        "congestion_probability": 0.048,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "07:50",
+        "hour": 7,
+        "predicted_violations": 2.6,
+        "congestion_probability": 0.04,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "08:50",
+        "hour": 8,
+        "predicted_violations": 1.5,
+        "congestion_probability": 0.034,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "09:50",
+        "hour": 9,
+        "predicted_violations": 0.0,
+        "congestion_probability": 0.168,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "10:50",
+        "hour": 10,
+        "predicted_violations": 0.0,
+        "congestion_probability": 0.193,
+        "congestion_level": "LOW",
+        "alert": false
+      }
+    ],
+    "BTP040 - Elite Junction": [
+      {
+        "time": "23:50",
+        "hour": 23,
+        "predicted_violations": 5.8,
+        "congestion_probability": 0.267,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "00:50",
+        "hour": 0,
+        "predicted_violations": 8.1,
+        "congestion_probability": 0.521,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "01:50",
+        "hour": 1,
+        "predicted_violations": 6.9,
+        "congestion_probability": 0.167,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "02:50",
+        "hour": 2,
+        "predicted_violations": 5.7,
+        "congestion_probability": 0.063,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "03:50",
+        "hour": 3,
+        "predicted_violations": 10.5,
+        "congestion_probability": 0.4,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "04:50",
+        "hour": 4,
+        "predicted_violations": 8.7,
+        "congestion_probability": 0.413,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "05:50",
+        "hour": 5,
+        "predicted_violations": 7.9,
+        "congestion_probability": 0.478,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "06:50",
+        "hour": 6,
+        "predicted_violations": 4.6,
+        "congestion_probability": 0.048,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "07:50",
+        "hour": 7,
+        "predicted_violations": 3.8,
+        "congestion_probability": 0.051,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "08:50",
+        "hour": 8,
+        "predicted_violations": 4.2,
+        "congestion_probability": 0.075,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "09:50",
+        "hour": 9,
+        "predicted_violations": 5.1,
+        "congestion_probability": 0.19,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "10:50",
+        "hour": 10,
+        "predicted_violations": 1.0,
+        "congestion_probability": 0.176,
+        "congestion_level": "LOW",
+        "alert": false
+      }
+    ],
+    "BTP044 - Sagar Theatre Junction": [
+      {
+        "time": "23:50",
+        "hour": 23,
+        "predicted_violations": 5.5,
+        "congestion_probability": 0.286,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "00:50",
+        "hour": 0,
+        "predicted_violations": 6.5,
+        "congestion_probability": 0.169,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "01:50",
+        "hour": 1,
+        "predicted_violations": 4.6,
+        "congestion_probability": 0.058,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "02:50",
+        "hour": 2,
+        "predicted_violations": 6.7,
+        "congestion_probability": 0.111,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "03:50",
+        "hour": 3,
+        "predicted_violations": 9.7,
+        "congestion_probability": 0.421,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "04:50",
+        "hour": 4,
+        "predicted_violations": 7.3,
+        "congestion_probability": 0.125,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "05:50",
+        "hour": 5,
+        "predicted_violations": 7.2,
+        "congestion_probability": 0.124,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "06:50",
+        "hour": 6,
+        "predicted_violations": 5.0,
+        "congestion_probability": 0.054,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "07:50",
+        "hour": 7,
+        "predicted_violations": 3.8,
+        "congestion_probability": 0.056,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "08:50",
+        "hour": 8,
+        "predicted_violations": 5.2,
+        "congestion_probability": 0.173,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "09:50",
+        "hour": 9,
+        "predicted_violations": 1.3,
+        "congestion_probability": 0.045,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "10:50",
+        "hour": 10,
+        "predicted_violations": 0.0,
+        "congestion_probability": 0.15,
+        "congestion_level": "LOW",
+        "alert": false
+      }
+    ],
+    "BTP211 - Central Street Junction": [
+      {
+        "time": "23:50",
+        "hour": 23,
+        "predicted_violations": 3.8,
+        "congestion_probability": 0.093,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "00:50",
+        "hour": 0,
+        "predicted_violations": 3.4,
+        "congestion_probability": 0.036,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "01:50",
+        "hour": 1,
+        "predicted_violations": 3.9,
+        "congestion_probability": 0.049,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "02:50",
+        "hour": 2,
+        "predicted_violations": 6.3,
+        "congestion_probability": 0.104,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "03:50",
+        "hour": 3,
+        "predicted_violations": 5.7,
+        "congestion_probability": 0.1,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "04:50",
+        "hour": 4,
+        "predicted_violations": 5.9,
+        "congestion_probability": 0.1,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "05:50",
+        "hour": 5,
+        "predicted_violations": 5.3,
+        "congestion_probability": 0.042,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "06:50",
+        "hour": 6,
+        "predicted_violations": 5.0,
+        "congestion_probability": 0.049,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "07:50",
+        "hour": 7,
+        "predicted_violations": 2.9,
+        "congestion_probability": 0.045,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "08:50",
+        "hour": 8,
+        "predicted_violations": 4.3,
+        "congestion_probability": 0.108,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "09:50",
+        "hour": 9,
+        "predicted_violations": 5.1,
+        "congestion_probability": 0.285,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "10:50",
+        "hour": 10,
+        "predicted_violations": 3.5,
+        "congestion_probability": 0.079,
+        "congestion_level": "LOW",
+        "alert": false
+      }
+    ],
+    "BTP020 - Hosahalli Metro Station": [
+      {
+        "time": "23:50",
+        "hour": 23,
+        "predicted_violations": 13.3,
+        "congestion_probability": 0.696,
+        "congestion_level": "MEDIUM",
+        "alert": true
+      },
+      {
+        "time": "00:50",
+        "hour": 0,
+        "predicted_violations": 11.1,
+        "congestion_probability": 0.599,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "01:50",
+        "hour": 1,
+        "predicted_violations": 9.6,
+        "congestion_probability": 0.582,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "02:50",
+        "hour": 2,
+        "predicted_violations": 8.1,
+        "congestion_probability": 0.49,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "03:50",
+        "hour": 3,
+        "predicted_violations": 12.8,
+        "congestion_probability": 0.575,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "04:50",
+        "hour": 4,
+        "predicted_violations": 4.8,
+        "congestion_probability": 0.064,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "05:50",
+        "hour": 5,
+        "predicted_violations": 3.5,
+        "congestion_probability": 0.038,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "06:50",
+        "hour": 6,
+        "predicted_violations": 4.4,
+        "congestion_probability": 0.063,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "07:50",
+        "hour": 7,
+        "predicted_violations": 7.0,
+        "congestion_probability": 0.418,
+        "congestion_level": "MEDIUM",
+        "alert": false
+      },
+      {
+        "time": "08:50",
+        "hour": 8,
+        "predicted_violations": 0.0,
+        "congestion_probability": 0.14,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "09:50",
+        "hour": 9,
+        "predicted_violations": 0.0,
+        "congestion_probability": 0.143,
+        "congestion_level": "LOW",
+        "alert": false
+      },
+      {
+        "time": "10:50",
+        "hour": 10,
+        "predicted_violations": 0.0,
+        "congestion_probability": 0.159,
+        "congestion_level": "LOW",
+        "alert": false
+      }
+    ]
+  }
+}
