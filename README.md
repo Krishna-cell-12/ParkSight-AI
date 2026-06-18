@@ -133,15 +133,14 @@ Validation:  TimeSeriesSplit (5 folds) — respects temporal order
 
 | Junction | Model | MAE | R² | Accuracy |
 |---|---|---|---|---|
-| Safina Plaza | RandomForest | — | — | —% |
-| KR Market | RandomForest | — | — | —% |
-| Elite Junction | RandomForest | — | — | —% |
-| Sagar Theatre | RandomForest | — | — | —% |
-| Central Street | RandomForest | — | — | —% |
-| Hosahalli Metro | RandomForest | — | — | —% |
-| **City-wide** | **RandomForest** | — | — | —% |
+| Safina Plaza | RandomForest | 6.32 | 0.233 | 23.3% |
+| KR Market | RandomForest | 4.31 | 0.912 | 91.2% |
+| Elite Junction | RandomForest | 0.53 | 0.998 | 99.8% |
+| Sagar Theatre | RandomForest | 0.60 | 0.998 | 99.8% |
+| Central Street | RandomForest | 2.74 | 0.829 | 82.9% |
+| Hosahalli Metro | RandomForest | 17.11 | 0.628 | 62.8% |
+| **City-wide** | **RandomForest** | 102.24 | 0.824 | 82.4% |
 
-*(Fill in actual values from nextday_forecast.json after running)*
 
 #### Model 4 — Congestion Probability (Random Forest Classifier)
 Target:    Binary — high congestion risk (1) or not (0)
