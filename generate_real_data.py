@@ -26,16 +26,31 @@ total_stations = df['police_station'].nunique()
 total_officers = df['created_by_id'].nunique()
 
 # ── 3. KPI VALUES ────────────────────────────────────────────
-# Use last 7 days of dataset as "this week", prior 7 as "last week"
-df_sorted = df.sort_values('created_datetime')
-all_dates  = sorted(df['date_only'].unique())
-last7  = set(all_dates[-7:])
-prev7  = set(all_dates[-14:-7])
+# Use the last FULL week with adequate data volume (not the literal
+# tail of the dataset, which winds down and has near-zero records).
+# Strategy: find the last date where daily count >= 30% of median,
+# then take the 7 preceding valid dates as the representative window.
+daily_counts = df.groupby('date_only').size().sort_index()
+median_daily = daily_counts.median()
+valid_dates  = daily_counts[daily_counts >= median_daily * 0.3].index
+last_valid_date = max(valid_dates)
+
+all_dates_valid = sorted(d for d in df['date_only'].unique() if d <= last_valid_date)
+last7 = set(all_dates_valid[-7:])
+prev7 = set(all_dates_valid[-14:-7])
+
+# Store actual date range for export
+week_start = min(last7)
+week_end   = max(last7)
+print(f"KPI week window: {week_start} to {week_end}")
 
 this_week_count = len(df[df['date_only'].isin(last7)])
 prev_week_count = len(df[df['date_only'].isin(prev7)])
 pct_change_total = round((this_week_count - prev_week_count)
                          / max(prev_week_count, 1) * 100, 1)
+
+print(f"This week count: {this_week_count}")
+print(f"Prev week count: {prev_week_count}")
 
 HIGH_SEV = ["PARKING NEAR ROAD CROSSING","DOUBLE PARKING",
             "PARKING ON FOOTPATH","PARKING NEAR TRAFFIC LIGHT OR ZEBRA CROSS"]
@@ -353,6 +368,8 @@ lines = [
     f"  source: 'BTP Challan Records Nov 2023 – Mar 2024',",
     f"  totalApproved: {total_approved},",
     f"  totalRaw: 298450,",
+    f"  kpiWeekStart: {js_val(str(week_start))},",
+    f"  kpiWeekEnd: {js_val(str(week_end))},",
     f"}};",
     '',
     f"export const KPI_DATA = [",

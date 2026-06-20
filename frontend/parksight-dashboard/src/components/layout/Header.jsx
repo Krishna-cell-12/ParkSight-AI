@@ -1,6 +1,13 @@
 import clsx from 'clsx';
 import { CalendarDays, SlidersHorizontal, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { DATA_META } from '../../data/realData';
+
+// Format a YYYY-MM-DD string as "Mar 10"
+function fmtDate(dateStr, opts) {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('en-US', opts);
+}
 
 export default function Header() {
   const { isDark, toggleTheme } = useTheme();
@@ -31,7 +38,11 @@ export default function Header() {
       <div className="flex items-center gap-3">
         <button id="header-date-range" className={btnClass}>
           <CalendarDays size={14} />
-          <span>May 12 – May 18, 2025</span>
+          <span>
+            {DATA_META.kpiWeekStart
+              ? `${fmtDate(DATA_META.kpiWeekStart, { month: 'short', day: 'numeric' })} – ${fmtDate(DATA_META.kpiWeekEnd, { month: 'short', day: 'numeric', year: 'numeric' })}`
+              : 'May 12 – May 18, 2025'}
+          </span>
         </button>
 
         <button id="header-filters" className={btnClass}>

@@ -3,33 +3,35 @@
 // DO NOT EDIT MANUALLY — re-run generate_real_data.py to update
 
 export const DATA_META = {
-  generatedAt: "2026-06-20 17:49:29.657247",
+  generatedAt: "2026-06-20 18:03:53.659466",
   source: 'BTP Challan Records Nov 2023 – Mar 2024',
   totalApproved: 115400,
   totalRaw: 298450,
+  kpiWeekStart: "2024-03-10",
+  kpiWeekEnd: "2024-03-16",
 };
 
 export const KPI_DATA = [
   { id:'total_violations', label:'Total Violations Detected',
-    value:27, change:'-98.7%',
-    changeLabel:'vs prev 7 days', positive:false,
+    value:6216, change:'+1924.8%',
+    changeLabel:'vs prev 7 days', positive:true,
     icon:'Car', color:'blue' },
   { id:'high_impact', label:'High Impact Violations',
-    value:0, change:'-100.0%',
-    changeLabel:'vs prev 7 days', positive:false,
+    value:300, change:'+2400.0%',
+    changeLabel:'vs prev 7 days', positive:true,
     icon:'AlertTriangle', color:'orange' },
   { id:'peak_window', label:'Peak Window Violations (2–6AM)',
-    value:9, change:'-98.9%',
-    changeLabel:'vs prev 7 days', positive:false,
+    value:2793, change:'+1505.2%',
+    changeLabel:'vs prev 7 days', positive:true,
     icon:'Clock', color:'teal' },
   { id:'enforcement_actions', label:'Enforcement Records (Approved)',
-    value:27, change:'-98.7%',
-    changeLabel:'vs prev 7 days', positive:false,
+    value:6216, change:'+1924.8%',
+    changeLabel:'vs prev 7 days', positive:true,
     icon:'Shield', color:'purple' },
 ];
 
 export const VIOLATIONS_OVER_TIME = {
-  daily:   { labels: ["2024-03-22", "2024-03-23", "2024-03-24", "2024-03-25", "2024-03-26", "2024-03-27", "2024-03-29"],   data: [13, 7, 1, 3, 1, 1, 1] },
+  daily:   { labels: ["2024-03-10", "2024-03-11", "2024-03-12", "2024-03-13", "2024-03-14", "2024-03-15", "2024-03-16"],   data: [629, 925, 695, 1000, 1362, 1262, 343] },
   weekly:  { labels: ["W45", "W46", "W47", "W48", "W49", "W50", "W51", "W52", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12", "W13"],  data: [4123, 11388, 8488, 8994, 8865, 9284, 9162, 9047, 7358, 7846, 11111, 7730, 4741, 29, 70, 84, 71, 923, 5648, 432, 6] },
   monthly: { labels: ["Jan", "Feb", "Mar", "Nov", "Dec"], data: [37745, 1266, 7038, 28642, 40709] },
 };

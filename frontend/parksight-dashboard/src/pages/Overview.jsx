@@ -6,6 +6,7 @@ import ViolationTypesDonut from '../components/charts/ViolationTypesDonut';
 import HotspotTable from '../components/panels/HotspotTable';
 import CongestionSummary from '../components/panels/CongestionSummary';
 import EnforcementPriority from '../components/panels/EnforcementPriority';
+import PredictionPreview from '../components/panels/PredictionPreview';
 import { Maximize2 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import {
@@ -34,6 +35,9 @@ export default function Overview({ onNavigate }) {
           <KPICard key={kpi.id} {...kpi} />
         ))}
       </div>
+
+      {/* ── 1.5 Prediction Preview Row ── */}
+      <PredictionPreview onViewForecast={() => onNavigate('nextday')} />
 
       {/* ── 2. Middle Row — responsive 12-col grid ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">

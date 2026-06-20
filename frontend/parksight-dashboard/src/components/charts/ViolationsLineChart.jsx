@@ -41,9 +41,14 @@ export default function ViolationsLineChart({ data }) {
       isDark ? 'bg-navy-700 border-navy-600/30' : 'bg-white border-gray-200 shadow-sm'
     )}>
       <div className="flex items-center justify-between mb-3">
-        <h3 className={clsx('text-sm font-semibold', isDark ? 'text-gray-200' : 'text-gray-800')}>
-          Violations Over Time
-        </h3>
+        <div>
+          <h3 className={clsx('text-sm font-semibold', isDark ? 'text-gray-200' : 'text-gray-800')}>
+            Violations Over Time
+          </h3>
+          <span className="text-[10px] dark:text-gray-500 text-gray-400">
+            Historical data
+          </span>
+        </div>
         <select
           id="violations-time-range"
           className={selectClass}

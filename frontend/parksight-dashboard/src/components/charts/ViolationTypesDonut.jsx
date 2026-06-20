@@ -3,6 +3,13 @@ import clsx from 'clsx';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { useTheme } from '../../context/ThemeContext';
 
+const SHORT_LABELS = {
+  'Parking Near Bustop/School/Hospital Etc': 'Near Bus Stop/School',
+  'Parking Near Traffic Light Or Zebra Cross': 'Near Traffic Light/Crossing',
+};
+
+const getShortLabel = (name) => SHORT_LABELS[name] || name;
+
 function CustomTooltip({ active, payload, isDark }) {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
@@ -21,6 +28,7 @@ export default function ViolationTypesDonut({ data }) {
   const { isDark } = useTheme();
   const [period, setPeriod] = useState('thisWeek');
   const chartData = data[period];
+  const total = chartData.reduce((sum, item) => sum + (item.count || 0), 0);
 
   const selectClass = clsx(
     'text-xs border rounded-md px-2 py-1 outline-none cursor-pointer',
@@ -73,20 +81,22 @@ export default function ViolationTypesDonut({ data }) {
           </ResponsiveContainer>
           {/* Center label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className={clsx('text-base font-bold', isDark ? 'text-gray-100' : 'text-gray-900')}>12,842</span>
-            <span className={clsx('text-[10px]', isDark ? 'text-gray-400' : 'text-gray-500')}>Total</span>
+            <span className={clsx('text-xl font-bold', isDark ? 'text-gray-100' : 'text-gray-800')}>
+              {total.toLocaleString()}
+            </span>
+            <span className={clsx('text-[10px]', isDark ? 'text-gray-500' : 'text-gray-400')}>Total</span>
           </div>
         </div>
 
         {/* Legend */}
-        <div className="flex-1 space-y-2">
+        <div className="flex-1 min-w-0 space-y-1.5">
           {chartData.map((item, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
-              <span className={clsx('text-xs flex-1 truncate', isDark ? 'text-gray-400' : 'text-gray-500')}>
-                {item.name}
+            <div key={item.name} className="flex items-center gap-2 text-xs">
+              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+              <span className={clsx('flex-1 truncate', isDark ? 'text-gray-400' : 'text-gray-500')}>
+                {getShortLabel(item.name)}
               </span>
-              <span className={clsx('text-xs font-semibold', isDark ? 'text-gray-200' : 'text-gray-800')}>
+              <span className={clsx('font-semibold flex-shrink-0 tabular-nums', isDark ? 'text-gray-200' : 'text-gray-700')}>
                 {item.value}%
               </span>
             </div>

@@ -180,9 +180,49 @@ function ClusterCircle({ cluster, onClick, isSelected }) {
 }
 
 // ViolationHeatmap — HeatmapLayer was removed from Google Maps API v3.65+
-// The visualization library no longer exposes HeatmapLayer.
-// Heat-effect is provided visually via the cluster circles' fillOpacity instead.
+// Replaced by DensityLayer below which uses nested semi-transparent circles.
 function ViolationHeatmap() {
+  return null
+}
+
+// DensityLayer — per-cluster nested glow circles that fake a heat-density effect
+function DensityLayer({ clusters }) {
+  const map = useMap()
+  const mapsLib = useMapsLibrary('maps')
+
+  useEffect(() => {
+    if (!map || !mapsLib) return
+
+    const circles = []
+
+    clusters.forEach(cluster => {
+      const color = getClusterColor(cluster.rank, cluster.violations)
+      const baseRadius = Math.max(150, Math.min(800, cluster.violations / 100))
+
+      const layers = [
+        { radius: baseRadius * 2.2, opacity: 0.06 },
+        { radius: baseRadius * 1.5, opacity: 0.12 },
+        { radius: baseRadius * 1.0, opacity: 0.22 },
+      ]
+
+      layers.forEach(l => {
+        circles.push(new mapsLib.Circle({
+          map,
+          center: { lat: cluster.lat, lng: cluster.lng },
+          radius: l.radius,
+          fillColor: color,
+          fillOpacity: l.opacity,
+          strokeWeight: 0,
+          clickable: false,
+          zIndex: 1,
+        }))
+      })
+    })
+
+    return () => circles.forEach(c => c.setMap(null))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, mapsLib])
+
   return null
 }
 
@@ -214,6 +254,7 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
   const [selectedCluster, setSelectedCluster] = useState(null)
   const [showTraffic, setShowTraffic] = useState(false)
   const [mapType, setMapType] = useState('roadmap')
+  const [viewMode, setViewMode] = useState('cluster') // 'cluster' | 'density'
 
   // Register global dispatch handler for InfoWindow button
   useEffect(() => {
@@ -249,16 +290,19 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
         >
           🚦 Traffic {showTraffic ? 'ON' : 'OFF'}
         </button>
-        <button
-          type="button"
-          disabled
-          title="HeatmapLayer removed in Google Maps API v3.65+"
+        {/* View mode dropdown — Cluster View vs Density View */}
+        <select
+          id="map-view-mode"
+          value={viewMode}
+          onChange={e => setViewMode(e.target.value)}
           className="px-3 py-1.5 text-xs font-semibold rounded-lg border
-            bg-navy-800/60 border-navy-600/40 text-gray-500
-            cursor-not-allowed backdrop-blur-sm"
+            bg-navy-700/90 border-navy-500 text-gray-300
+            hover:bg-navy-600 backdrop-blur-sm transition-all cursor-pointer"
+          style={{ appearance: 'auto' }}
         >
-          🔥 Heatmap N/A
-        </button>
+          <option value="cluster">🔵 Cluster View</option>
+          <option value="density">🌊 Density View</option>
+        </select>
       </div>
 
       {/* Cluster count badge */}
@@ -340,7 +384,8 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
           className="w-full h-full"
           style={{ width: '100%', height: '100%' }}
         >
-          {clusters.map(cluster => (
+          {/* Cluster view: crisp clickable circles with InfoWindow */}
+          {viewMode === 'cluster' && clusters.map(cluster => (
             <ClusterCircle
               key={cluster.rank}
               cluster={cluster}
@@ -348,6 +393,8 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
               isSelected={selectedCluster?.rank === cluster.rank}
             />
           ))}
+          {/* Density view: nested glow circles, no click handlers */}
+          {viewMode === 'density' && <DensityLayer clusters={clusters} />}
           <ViolationHeatmap />
           <TrafficLayer visible={showTraffic} />
         </Map>
