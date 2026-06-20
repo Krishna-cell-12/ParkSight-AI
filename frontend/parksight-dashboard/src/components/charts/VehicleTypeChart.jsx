@@ -6,8 +6,6 @@ import {
 import { useTheme } from '../../context/ThemeContext';
 import { VEHICLE_TYPES } from '../../data/realData';
 
-const maxCount = Math.max(...VEHICLE_TYPES.map(v => v.count));
-
 function CustomTooltip({ active, payload, isDark }) {
   if (!active || !payload?.length) return null;
   const d = payload[0]?.payload;

@@ -33,7 +33,7 @@ function useCountUp(target, duration = 1200) {
   return count;
 }
 
-export default function KPICard({ label, value, change, changeLabel, positive, icon, color }) {
+export default function KPICard({ label, value, change, changeLabel, icon, color }) {
   const { isDark } = useTheme();
   const displayValue = useCountUp(value);
   const Icon = LucideIcons[icon] || LucideIcons.Activity;

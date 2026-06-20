@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
   APIProvider,
   Map,
@@ -11,33 +11,61 @@ import { useTheme } from '../context/ThemeContext'
 const BENGALURU_CENTER = { lat: 12.9716, lng: 77.5946 }
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
-// Dark map style matching our dashboard theme
+// Deep-dark map style — comprehensive coverage for all feature types
 const DARK_MAP_STYLES = [
-  { elementType: 'geometry',           stylers: [{ color: '#0d1b2a' }] },
+  { elementType: 'geometry', stylers: [{ color: '#0B1120' }] },
+  { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#6B8299' }] },
   { elementType: 'labels.text.stroke', stylers: [{ color: '#0B1120' }] },
-  { elementType: 'labels.text.fill',   stylers: [{ color: '#4A6580' }] },
-  { featureType: 'road',               elementType: 'geometry',
+
+  { featureType: 'administrative', elementType: 'geometry',
     stylers: [{ color: '#1C2A3A' }] },
-  { featureType: 'road.arterial',      elementType: 'geometry',
-    stylers: [{ color: '#162032' }] },
-  { featureType: 'road.highway',       elementType: 'geometry',
-    stylers: [{ color: '#1C3A5C' }] },
-  { featureType: 'road.highway',       elementType: 'labels.text.fill',
-    stylers: [{ color: '#3B82F6' }] },
-  { featureType: 'water',              elementType: 'geometry',
-    stylers: [{ color: '#0B1120' }] },
-  { featureType: 'water',              elementType: 'labels.text.fill',
+  { featureType: 'administrative.country', elementType: 'labels.text.fill',
     stylers: [{ color: '#8DA4BE' }] },
-  { featureType: 'poi',                stylers: [{ visibility: 'off' }] },
-  { featureType: 'transit',            stylers: [{ visibility: 'off' }] },
-  { featureType: 'administrative',     elementType: 'geometry',
-    stylers: [{ color: '#1C2A3A' }] },
+  { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
   { featureType: 'administrative.locality', elementType: 'labels.text.fill',
     stylers: [{ color: '#8DA4BE' }] },
+  { featureType: 'administrative.neighborhood', stylers: [{ visibility: 'off' }] },
+
+  { featureType: 'poi', elementType: 'geometry',
+    stylers: [{ color: '#162032' }] },
+  { featureType: 'poi', elementType: 'labels.text.fill',
+    stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi.park', elementType: 'geometry',
+    stylers: [{ color: '#0F1A14' }] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill',
+    stylers: [{ color: '#4A6B5A' }] },
+
+  { featureType: 'road', elementType: 'geometry',
+    stylers: [{ color: '#1C2A3A' }] },
+  { featureType: 'road', elementType: 'geometry.stroke',
+    stylers: [{ color: '#0B1120' }] },
+  { featureType: 'road', elementType: 'labels.text.fill',
+    stylers: [{ color: '#6B8299' }] },
+  { featureType: 'road.arterial', elementType: 'geometry',
+    stylers: [{ color: '#162032' }] },
+  { featureType: 'road.highway', elementType: 'geometry',
+    stylers: [{ color: '#1C3A5C' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke',
+    stylers: [{ color: '#0B1120' }] },
+  { featureType: 'road.highway', elementType: 'labels.text.fill',
+    stylers: [{ color: '#3B82F6' }] },
+  { featureType: 'road.local', elementType: 'geometry',
+    stylers: [{ color: '#162032' }] },
+
+  { featureType: 'transit', elementType: 'geometry',
+    stylers: [{ color: '#162032' }] },
+  { featureType: 'transit.station', elementType: 'labels.text.fill',
+    stylers: [{ visibility: 'off' }] },
+
+  { featureType: 'water', elementType: 'geometry',
+    stylers: [{ color: '#070B12' }] },
+  { featureType: 'water', elementType: 'labels.text.fill',
+    stylers: [{ color: '#4A6580' }] },
 ]
 
 const LIGHT_MAP_STYLES = [
-  { featureType: 'poi',     stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi', elementType: 'labels.text', stylers: [{ visibility: 'off' }] },
   { featureType: 'transit', stylers: [{ visibility: 'off' }] },
 ]
 
@@ -49,27 +77,12 @@ function getClusterColor(rank, violations) {
   return '#3B82F6'
 }
 
-// Inner component — has access to map instance
-function MapOverlays({ clusters, onClusterClick, selectedCluster }) {
-  const map = useMap()
-  const mapsLib = useMapsLibrary('maps')
-  const visualizationLib = useMapsLibrary('visualization')
-
-  // Draw circles and heatmap once libraries are loaded
-  useEffect(() => {
-    if (!map || !mapsLib) return
-    // Circles are drawn via the CircleOverlay component below
-  }, [map, mapsLib])
-
-  return null
-}
 
 // Individual cluster circle overlay
 function ClusterCircle({ cluster, onClick, isSelected }) {
   const map = useMap()
   const mapsLib = useMapsLibrary('maps')
   const [circle, setCircle] = useState(null)
-  const [infoWindow, setInfoWindow] = useState(null)
 
   useEffect(() => {
     if (!map || !mapsLib) return
@@ -146,18 +159,16 @@ function ClusterCircle({ cluster, onClick, isSelected }) {
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCircle(c)
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setInfoWindow(iw)
 
     return () => {
       c.setMap(null)
       iw.close()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, mapsLib])
 
   useEffect(() => {
     if (!circle) return
-    const color = getClusterColor(cluster.rank, cluster.violations)
     circle.setOptions({
       fillOpacity: isSelected ? 0.45 : 0.25,
       strokeOpacity: isSelected ? 1.0 : 0.75,
@@ -168,48 +179,10 @@ function ClusterCircle({ cluster, onClick, isSelected }) {
   return null
 }
 
-// Heatmap layer using visualization library
-function ViolationHeatmap({ clusters, visible }) {
-  const map = useMap()
-  const visualizationLib = useMapsLibrary('visualization')
-  const coreLib = useMapsLibrary('core')
-  const [heatmap, setHeatmap] = useState(null)
-
-  useEffect(() => {
-    if (!map || !visualizationLib || !coreLib) return
-
-    try {
-      const points = clusters.map(c => ({
-        location: new coreLib.LatLng(c.lat, c.lng),
-        weight: Math.log1p(c.violations || 0) / Math.log1p(68494),
-      }))
-
-      const h = new visualizationLib.HeatmapLayer({
-        data: points,
-        radius: 40,
-        opacity: 0.7,
-        gradient: [
-          'rgba(0,0,0,0)',
-          'rgba(29,78,216,0.6)',
-          'rgba(124,58,237,0.7)',
-          'rgba(220,38,38,0.85)',
-          'rgba(252,165,165,1)',
-        ],
-      })
-
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setHeatmap(h)
-      return () => h.setMap(null)
-    } catch (err) {
-      console.error('Heatmap init error:', err)
-    }
-  }, [map, visualizationLib, coreLib, clusters])
-
-  useEffect(() => {
-    if (!heatmap) return
-    heatmap.setMap(visible ? map : null)
-  }, [visible, heatmap, map])
-
+// ViolationHeatmap — HeatmapLayer was removed from Google Maps API v3.65+
+// The visualization library no longer exposes HeatmapLayer.
+// Heat-effect is provided visually via the cluster circles' fillOpacity instead.
+function ViolationHeatmap() {
   return null
 }
 
@@ -239,7 +212,6 @@ function TrafficLayer({ visible }) {
 export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
   const { isDark } = useTheme()
   const [selectedCluster, setSelectedCluster] = useState(null)
-  const [showHeatmap, setShowHeatmap] = useState(false)
   const [showTraffic, setShowTraffic] = useState(false)
   const [mapType, setMapType] = useState('roadmap')
 
@@ -279,15 +251,13 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
         </button>
         <button
           type="button"
-          onClick={() => setShowHeatmap(v => !v)}
-          className={`px-3 py-1.5 text-xs font-semibold rounded-lg border
-            backdrop-blur-sm transition-all ${
-            showHeatmap
-              ? 'bg-orange-600/80 border-orange-500 text-white'
-              : 'bg-navy-700/90 border-navy-500 text-gray-300 hover:bg-navy-600'
-          }`}
+          disabled
+          title="HeatmapLayer removed in Google Maps API v3.65+"
+          className="px-3 py-1.5 text-xs font-semibold rounded-lg border
+            bg-navy-800/60 border-navy-600/40 text-gray-500
+            cursor-not-allowed backdrop-blur-sm"
         >
-          🔥 Heatmap {showHeatmap ? 'ON' : 'OFF'}
+          🔥 Heatmap N/A
         </button>
       </div>
 
@@ -353,16 +323,20 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
         </div>
       )}
 
-      {/* Google Map */}
-      <APIProvider apiKey={API_KEY} libraries={['visualization']}>
+      {/* Google Map — key forces remount on theme change so styles are freshly applied */}
+      <APIProvider apiKey={API_KEY}>
         <Map
-          mapId="parksight-map"
+          key={`map-${isDark ? 'dark' : 'light'}`}
           defaultCenter={BENGALURU_CENTER}
           defaultZoom={12}
           mapTypeId={mapType}
           styles={isDark ? DARK_MAP_STYLES : LIGHT_MAP_STYLES}
           disableDefaultUI={false}
           gestureHandling="greedy"
+          zoomControl={true}
+          mapTypeControl={false}
+          streetViewControl={false}
+          fullscreenControl={true}
           className="w-full h-full"
           style={{ width: '100%', height: '100%' }}
         >
@@ -374,7 +348,7 @@ export default function ParkSightMap({ clusters = HOTSPOT_CLUSTERS }) {
               isSelected={selectedCluster?.rank === cluster.rank}
             />
           ))}
-          <ViolationHeatmap clusters={clusters} visible={showHeatmap} />
+          <ViolationHeatmap />
           <TrafficLayer visible={showTraffic} />
         </Map>
       </APIProvider>

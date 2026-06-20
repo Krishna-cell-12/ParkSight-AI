@@ -49,8 +49,19 @@ for cid, grp in cluster_rows.groupby('cluster_id'):
     centroid_lon = grp['longitude'].mean()
 
     # Junction name: most common excluding "No Junction"
+    # Uses a three-tier fallback hierarchy:
+    #   1. Named junction (BTP code or named intersection)
+    #   2. Police-station zone label (mid-block cluster near that station)
     junc_counts = grp[grp['junction_name'] != 'No Junction']['junction_name'].value_counts()
-    dominant_junction = junc_counts.index[0] if len(junc_counts) > 0 else 'Unknown Zone'
+
+    if len(junc_counts) > 0:
+        dominant_junction = junc_counts.index[0]
+        location_type = 'junction'
+    else:
+        # Mid-block cluster: no named junction — use police station area as label
+        station_name = grp['police_station'].mode()[0] if len(grp) > 0 else 'Unknown'
+        dominant_junction = f"{station_name} Zone (Mid-block)"
+        location_type = 'station_area'
 
     # Station
     dominant_station = grp['police_station'].mode()[0] if len(grp) > 0 else 'Unknown'
@@ -83,6 +94,7 @@ for cid, grp in cluster_rows.groupby('cluster_id'):
         'centroid_lon': round(centroid_lon, 6),
         'dominant_junction': dominant_junction,
         'dominant_station': dominant_station,
+        'location_type': location_type,
         'peak_hour_ratio': round(peak_hour_ratio, 4),
         'high_severity_ratio': round(high_severity_ratio, 4),
         'medium_severity_ratio': round(medium_severity_ratio, 4),

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { CalendarDays, SlidersHorizontal, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
-export default function Header({ activePage }) {
+export default function Header() {
   const { isDark, toggleTheme } = useTheme();
 
   const btnClass = clsx(

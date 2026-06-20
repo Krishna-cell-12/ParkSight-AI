@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-17T05:37:24.787344",
+  "generated_at": "2026-06-20T17:47:24.854891",
   "total_active_zones": 118,
   "critical_zones": 0,
   "high_zones": 0,
@@ -22,12 +22,13 @@
       "centroid_lat": 12.98098,
       "centroid_lon": 77.577594,
       "high_severity_ratio": "1.0%",
-      "sunday_ratio": "15.6%"
+      "sunday_ratio": "15.6%",
+      "locationType": "junction"
     },
     {
       "rank": 2,
-      "zone_name": "Unknown Zone",
-      "full_junction_name": "Unknown Zone",
+      "zone_name": "Whitefield Zone (Mid-block)",
+      "full_junction_name": "Whitefield Zone (Mid-block)",
       "station": "Whitefield",
       "violation_count": 213,
       "impact_score": 2.78,
@@ -40,12 +41,13 @@
       "centroid_lat": 12.987325,
       "centroid_lon": 77.734592,
       "high_severity_ratio": "45.3%",
-      "sunday_ratio": "0.9%"
+      "sunday_ratio": "0.9%",
+      "locationType": "station_area"
     },
     {
       "rank": 3,
-      "zone_name": "Unknown Zone",
-      "full_junction_name": "Unknown Zone",
+      "zone_name": "Kengeri Zone (Mid-block)",
+      "full_junction_name": "Kengeri Zone (Mid-block)",
       "station": "Kengeri",
       "violation_count": 43,
       "impact_score": 2.5,
@@ -58,7 +60,8 @@
       "centroid_lat": 12.917065,
       "centroid_lon": 77.500184,
       "high_severity_ratio": "0.0%",
-      "sunday_ratio": "0.0%"
+      "sunday_ratio": "0.0%",
+      "locationType": "station_area"
     },
     {
       "rank": 4,
@@ -76,12 +79,13 @@
       "centroid_lat": 12.996998,
       "centroid_lon": 77.583694,
       "high_severity_ratio": "7.8%",
-      "sunday_ratio": "6.0%"
+      "sunday_ratio": "6.0%",
+      "locationType": "junction"
     },
     {
       "rank": 5,
-      "zone_name": "Unknown Zone",
-      "full_junction_name": "Unknown Zone",
+      "zone_name": "K.S. Layout Zone (Mid-block)",
+      "full_junction_name": "K.S. Layout Zone (Mid-block)",
       "station": "K.S. Layout",
       "violation_count": 38,
       "impact_score": 2.24,
@@ -94,12 +98,13 @@
       "centroid_lat": 12.893954,
       "centroid_lon": 77.567947,
       "high_severity_ratio": "0.0%",
-      "sunday_ratio": "18.4%"
+      "sunday_ratio": "18.4%",
+      "locationType": "station_area"
     },
     {
       "rank": 6,
-      "zone_name": "Unknown Zone",
-      "full_junction_name": "Unknown Zone",
+      "zone_name": "Mahadevapura Zone (Mid-block)",
+      "full_junction_name": "Mahadevapura Zone (Mid-block)",
       "station": "Mahadevapura",
       "violation_count": 352,
       "impact_score": 2.2,
@@ -112,12 +117,13 @@
       "centroid_lat": 12.995424,
       "centroid_lon": 77.696044,
       "high_severity_ratio": "8.8%",
-      "sunday_ratio": "67.9%"
+      "sunday_ratio": "67.9%",
+      "locationType": "station_area"
     },
     {
       "rank": 7,
-      "zone_name": "Unknown Zone",
-      "full_junction_name": "Unknown Zone",
+      "zone_name": "Kodigehalli Zone (Mid-block)",
+      "full_junction_name": "Kodigehalli Zone (Mid-block)",
       "station": "Kodigehalli",
       "violation_count": 1081,
       "impact_score": 2.17,
@@ -130,12 +136,13 @@
       "centroid_lat": 13.071001,
       "centroid_lon": 77.58886,
       "high_severity_ratio": "7.8%",
-      "sunday_ratio": "24.1%"
+      "sunday_ratio": "24.1%",
+      "locationType": "station_area"
     },
     {
       "rank": 8,
-      "zone_name": "Unknown Zone",
-      "full_junction_name": "Unknown Zone",
+      "zone_name": "K.R. Pura Zone (Mid-block)",
+      "full_junction_name": "K.R. Pura Zone (Mid-block)",
       "station": "K.R. Pura",
       "violation_count": 81,
       "impact_score": 2.15,
@@ -148,12 +155,13 @@
       "centroid_lat": 13.045837,
       "centroid_lon": 77.750314,
       "high_severity_ratio": "30.6%",
-      "sunday_ratio": "24.7%"
+      "sunday_ratio": "24.7%",
+      "locationType": "station_area"
     },
     {
       "rank": 9,
-      "zone_name": "Unknown Zone",
-      "full_junction_name": "Unknown Zone",
+      "zone_name": "Wilson Garden Zone (Mid-block)",
+      "full_junction_name": "Wilson Garden Zone (Mid-block)",
       "station": "Wilson Garden",
       "violation_count": 33,
       "impact_score": 2.12,
@@ -166,12 +174,13 @@
       "centroid_lat": 12.938243,
       "centroid_lon": 77.592601,
       "high_severity_ratio": "0.0%",
-      "sunday_ratio": "15.2%"
+      "sunday_ratio": "15.2%",
+      "locationType": "station_area"
     },
     {
       "rank": 10,
-      "zone_name": "Unknown Zone",
-      "full_junction_name": "Unknown Zone",
+      "zone_name": "HSR Layout Zone (Mid-block)",
+      "full_junction_name": "HSR Layout Zone (Mid-block)",
       "station": "HSR Layout",
       "violation_count": 102,
       "impact_score": 2.09,
@@ -184,7 +193,8 @@
       "centroid_lat": 12.910366,
       "centroid_lon": 77.644413,
       "high_severity_ratio": "0.0%",
-      "sunday_ratio": "78.4%"
+      "sunday_ratio": "78.4%",
+      "locationType": "station_area"
     }
   ]
 }

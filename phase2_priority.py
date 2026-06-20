@@ -49,7 +49,8 @@ for rank, (_, row) in enumerate(top10.iterrows(), 1):
         "centroid_lat": float(row['centroid_lat']),
         "centroid_lon": float(row['centroid_lon']),
         "high_severity_ratio": f"{float(row['high_severity_ratio'])*100:.1f}%",
-        "sunday_ratio": f"{float(row['sunday_ratio'])*100:.1f}%"
+        "sunday_ratio": f"{float(row['sunday_ratio'])*100:.1f}%",
+        "locationType": str(row.get('location_type', 'junction')),
     })
 
 output = {

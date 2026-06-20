@@ -51,6 +51,12 @@ export default function EnforcementPriority({ priorities, onNavigate }) {
             <div className="flex-1 min-w-0">
               <p className={clsx('text-sm font-semibold truncate', isDark ? 'text-gray-200' : 'text-gray-800')}>
                 {item.name}
+                {item.locationType === 'station_area' && (
+                  <span className="ml-1.5 text-[9px] px-1.5 py-0.5 rounded
+                    bg-blue-500/15 text-blue-400 font-medium align-middle">
+                    Mid-block
+                  </span>
+                )}
               </p>
               <p className={clsx('text-[11px] mt-0.5', isDark ? 'text-gray-400' : 'text-gray-500')}>
                 {item.subtitle}
