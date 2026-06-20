@@ -7,6 +7,7 @@ import {
 import {
   CheckCircle
 } from 'lucide-react';
+import WhatIfSimulator from '../components/panels/WhatIfSimulator';
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -70,6 +71,8 @@ export default function NextDayForecast() {
           City-wide Accuracy: {NEXTDAY_FORECAST.cityWide.accuracy}% · R²: {NEXTDAY_FORECAST.cityWide.r2}
         </div>
       </div>
+
+      <WhatIfSimulator />
 
       {/* B) CITY-WIDE 7-DAY BAR CHART */}
       <div className="bg-white dark:bg-navy-800 rounded-xl p-5 border border-gray-100 dark:border-navy-600 shadow-sm w-full">

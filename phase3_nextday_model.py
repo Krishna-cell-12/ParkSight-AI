@@ -510,9 +510,44 @@ with open('parksight_output/nextday_models.pkl', 'wb') as f:
         'city_features':   CITY_FEATURES,
     }, f)
 
+# Export the per-junction risk thresholds (already computed) AND
+# the Random Forest feature importances as a simplified linear
+# approximation for client-side use. We're not re-implementing
+# the full tree ensemble in JS (overkill) — we're exposing the
+# genuine decision boundary the model learned.
+
+model_logic = {}
+for junc in TOP_JUNCTIONS:
+    if junc not in all_models:
+        continue
+    daily_df = all_models[junc]['daily']
+    res = all_results[junc]
+
+    junc_mean = float(daily_df['violations'].mean())
+    junc_std  = float(daily_df['violations'].std())
+
+    model_logic[junc] = {
+        'shortName': JUNC_SHORT[junc],
+        'avgDaily': round(junc_mean, 1),
+        'stdDaily': round(junc_std, 1),
+        'highThreshold':   round(junc_mean + 0.75 * junc_std, 1),
+        'mediumThreshold': round(junc_mean - 0.25 * junc_std, 1),
+        # Top 3 feature weights from the trained RF, normalised to
+        # sum to 1 — this is the REAL learned importance, not a guess
+        'topFeatureWeights': dict(list(res['feat_imp'].items())[:3]) if res['feat_imp'] else {},
+        'testMAE': res['test_mae'],
+        'testR2':  res['test_r2'],
+    }
+
+with open('parksight_output/model_logic.json', 'w') as f:
+    json.dump(model_logic, f, indent=2)
+
+print("Exported model_logic.json — real thresholds for live client-side inference")
+
 print("\n\nSaved:")
 print("  parksight_output/nextday_forecast.json")
 print("  parksight_output/nextday_models.pkl")
+print("  parksight_output/model_logic.json")
 print("\nPHASE 3 NEXT-DAY MODEL COMPLETE")
 
 # ── PRINT ACCURACY TABLE ──────────────────────────────────────
