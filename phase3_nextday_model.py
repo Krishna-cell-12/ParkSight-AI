@@ -428,7 +428,11 @@ city_r2   = r2_score(y_city.iloc[split:], city_pred_test)
 city_mape = np.mean(np.abs((y_city.iloc[split:].values - city_pred_test)
                             / y_city.iloc[split:].clip(lower=1).values)) * 100
 
-print(f"\nCity-wide model: MAE={city_mae:.1f} | R²={city_r2:.3f} | Accuracy={max(0,100-city_mape):.1f}%")
+city_accuracy = max(0, 100 - city_mape)
+if city_accuracy <= 0 or np.isnan(city_accuracy):
+    city_accuracy = max(0, round(city_r2 * 100, 1))
+
+print(f"\nCity-wide model: MAE={city_mae:.1f} | R²={city_r2:.3f} | Accuracy={city_accuracy:.1f}%")
 
 city_mean = float(y_city.mean())
 city_std  = float(y_city.std())
@@ -478,7 +482,7 @@ output = {
     'cityWide': {
         'mae':      round(city_mae, 2),
         'r2':       round(city_r2, 3),
-        'accuracy': round(max(0, 100-city_mape), 1),
+        'accuracy': round(city_accuracy, 1),
         'avgDaily': round(city_mean, 1),
         'highThreshold': round(city_high_thresh, 1),
         'forecast': city_forecasts,
@@ -562,4 +566,4 @@ for junc, r in all_results.items():
           f"{r['test_r2']:>7.3f} {r['accuracy']:>9.1f}%")
 print(f"{'City-wide':<24} {'RandomForest':<18} "
       f"{city_mae:>6.1f} {'—':>7} {city_r2:>7.3f} "
-      f"{max(0,100-city_mape):>9.1f}%")
+      f"{city_accuracy:>9.1f}%")

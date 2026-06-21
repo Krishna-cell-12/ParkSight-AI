@@ -65,7 +65,7 @@ const PredictionPreview = ({ onViewForecast }) => {
         isDark ? 'border-navy-600/30' : 'border-gray-100'
       )}>
         <span className={clsx('text-[10px]', isDark ? 'text-gray-500' : 'text-gray-400')}>
-          Model accuracy: {NEXTDAY_FORECAST?.modelAccuracySummary?.RandomForestClassifier?.accuracy || NEXTDAY_FORECAST?.cityWide?.accuracy}% · Based on 136 days of BTP data
+          Model accuracy: {NEXTDAY_FORECAST?.cityWide?.accuracy}% · Based on 136 days of BTP data
         </span>
         <button 
           onClick={onViewForecast}
